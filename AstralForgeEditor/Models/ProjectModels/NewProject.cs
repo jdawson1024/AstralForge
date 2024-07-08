@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.AccessControl;
+
 
 namespace AstralForgeEditor.Models.ProjectModels
 {
@@ -73,19 +75,37 @@ namespace AstralForgeEditor.Models.ProjectModels
             {
                 try
                 {
-                    // Test if the directory exists
-                    if (!Directory.Exists(ProjectPath))
+                    // Check if the path is a valid path format
+                    if (!Path.IsPathRooted(ProjectPath))
                     {
-                        throw new DirectoryNotFoundException("The specified path does not exist.");
+                        ErrorMsg = "The specified path is not a valid absolute path.";
+                        return false;
                     }
 
-                    // Test if path is writable by creating a temporary file
-                    var tempFilePath = Path.Combine(path, Path.GetRandomFileName());
-                    Directory.CreateDirectory(path);
-                    using (var tempFile = File.Create(tempFilePath))
+                    // Check if the directory exists
+                    if (!Directory.Exists(ProjectPath))
                     {
+                        ErrorMsg = "The specified path does not exist.";
+                        return false;
                     }
-                    File.Delete(tempFilePath);
+
+                    // Check if the path is writable without creating files
+                    var directoryInfo = new DirectoryInfo(ProjectPath);
+                    if ((directoryInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                    {
+                        ErrorMsg = "The specified directory is read-only.";
+                        return false;
+                    }
+
+                    // Check if a directory with the project name already exists
+                    if (Directory.Exists(path))
+                    {
+                        ErrorMsg = "A project with this name already exists in the specified path.";
+                        return false;
+                    }
+
+                    // Try to get directory contents to check for access
+                    directoryInfo.GetDirectories();
 
                     ErrorMsg = string.Empty;
                     IsValid = true;
@@ -93,10 +113,6 @@ namespace AstralForgeEditor.Models.ProjectModels
                 catch (UnauthorizedAccessException)
                 {
                     ErrorMsg = "Access to the path is denied.";
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    ErrorMsg = "The specified path does not exist.";
                 }
                 catch (IOException)
                 {
