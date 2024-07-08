@@ -28,6 +28,10 @@ namespace AstralForgeEditor.GameProject
             InitializeComponent();
             _newProject = new NewProject();
             DataContext = _newProject;
+
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            this.ResizeMode = ResizeMode.NoResize;
+            this.ShowInTaskbar = false;
         }
 
         private void CreateNewProjectButton_Click(object sender, RoutedEventArgs e)
@@ -87,21 +91,15 @@ namespace AstralForgeEditor.GameProject
 
             try
             {
-                // Create the project directory
                 Directory.CreateDirectory(projectPath);
 
-                // Create template folders
                 foreach (var folder in _newProject.SelectedTemplate.Folders)
                 {
                     Directory.CreateDirectory(System.IO.Path.Combine(projectPath, folder));
                 }
 
-                // Save the project file
                 _newProject.SaveProjectFile(projectPath);
-
-                MessageBox.Show($"Project '{projectName}' created at '{projectPath}'", "Project Created", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // Optionally, you can close the dialog or switch to the new project here
+                this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
@@ -122,6 +120,7 @@ namespace AstralForgeEditor.GameProject
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
     }

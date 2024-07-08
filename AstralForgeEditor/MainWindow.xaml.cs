@@ -32,14 +32,8 @@ namespace AstralForgeEditor
         private void OpenProjectBrowserDialog()
         {
             var projectBrowser = new ProjectBrowerDialg();
-            if(projectBrowser.ShowDialog() == false)
-            {
-                System.Windows.Application.Current.Shutdown();
-            }
-            else
-            {
-
-            }
+            projectBrowser.Owner = this;
+            projectBrowser.ShowDialog();
         }
     }
 }
