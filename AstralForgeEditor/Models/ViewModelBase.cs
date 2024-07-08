@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AstralForgeEditor.GameProject
+namespace AstralForgeEditor.Models
 {
-    public class ViewModelBase : INotifyPropertyChanged 
+    public class ViewModelBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler ?PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChangd(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
