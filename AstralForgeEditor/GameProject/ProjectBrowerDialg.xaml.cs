@@ -61,8 +61,9 @@ namespace AstralForgeEditor.GameProject
         {
             if (TemplateList.SelectedItem != null)
             {
-                DetailsTitle.Text = "Template Details";
                 var selectedTemplate = (ProjectTemplate)TemplateList.SelectedItem;
+                _newProject.SelectedTemplate = selectedTemplate;
+                DetailsTitle.Text = "Template Details";
                 DetailsContent.Text = $"Details of {selectedTemplate.ProjectType}\nFolders: {string.Join(", ", selectedTemplate.Folders)}";
             }
         }
@@ -70,7 +71,7 @@ namespace AstralForgeEditor.GameProject
         private void CreateProjectButton_Click(object sender, RoutedEventArgs e)
         {
             string projectName = _newProject.Name;
-            string projectPath = _newProject.ProjectPath;
+            string projectPath = System.IO.Path.Combine(_newProject.ProjectPath, projectName);
 
             if (!_newProject.IsValid)
             {
@@ -78,10 +79,35 @@ namespace AstralForgeEditor.GameProject
                 return;
             }
 
-            // Implement the logic to create a new project using the project name and path
-            // For example, you might want to validate the inputs and create the project directory
+            if (_newProject.SelectedTemplate == null)
+            {
+                MessageBox.Show("Please select a project template.", "No Template Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-            MessageBox.Show($"Project '{projectName}' created at '{projectPath}'", "Project Created", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                // Create the project directory
+                Directory.CreateDirectory(projectPath);
+
+                // Create template folders
+                foreach (var folder in _newProject.SelectedTemplate.Folders)
+                {
+                    Directory.CreateDirectory(System.IO.Path.Combine(projectPath, folder));
+                }
+
+                // Save the project file
+                _newProject.SaveProjectFile(projectPath);
+
+                MessageBox.Show($"Project '{projectName}' created at '{projectPath}'", "Project Created", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Optionally, you can close the dialog or switch to the new project here
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating project: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)

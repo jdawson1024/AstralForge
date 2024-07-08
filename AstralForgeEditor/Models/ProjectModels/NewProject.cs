@@ -14,6 +14,7 @@ namespace AstralForgeEditor.Models.ProjectModels
 {
     public class NewProject : ViewModelBase
     {
+        public const string ProjectFileExtension = ".afproj";
         private readonly string _templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\AstralForgeEditor\ProjectTemplates");
         private string _name = "NewProject";
         public string Name { get { return _name; } set { if (_name != value) { _name = value; ValidateProjectPath(); OnPropertyChanged(nameof(Name)); } } }
@@ -47,7 +48,19 @@ namespace AstralForgeEditor.Models.ProjectModels
         }
         private ObservableCollection<ProjectTemplate> _projectTemplates = new ObservableCollection<ProjectTemplate>();
         public ReadOnlyObservableCollection<ProjectTemplate> ProjectTemplates { get; }
-
+        private ProjectTemplate _selectedTemplate;
+        public ProjectTemplate SelectedTemplate
+        {
+            get => _selectedTemplate;
+            set
+            {
+                if(_selectedTemplate != value)
+                {
+                    _selectedTemplate = value;
+                    OnPropertyChanged(nameof(SelectedTemplate));
+                }
+            }
+        }
         private bool ValidateProjectPath()
         {
             var path = ProjectPath;
@@ -151,6 +164,25 @@ namespace AstralForgeEditor.Models.ProjectModels
                 Debug.WriteLine(ex.Message);
                 //TODO: Log errors 
             }
+        }
+
+        public void SaveProjectFile(string projectPath)
+        {
+            string projectFilePath = Path.Combine(projectPath, Name + ProjectFileExtension);
+            var projectInfo = new
+            {
+                Name = Name,
+                Path = projectPath,
+                CreationDate = DateTime.Now,
+                AstralForgeEditorVersion = "0.0.1",
+                AstralForgeEngineVersion = "0.0.1",
+                TemplateName = SelectedTemplate?.ProjectType,
+                TemplateFolders = SelectedTemplate?.Folders,
+                // TODO: Add any other project-specific information you want to save I.E maybe engine or editor version
+            };
+
+            string jsonContent = System.Text.Json.JsonSerializer.Serialize(projectInfo, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(projectFilePath, jsonContent);
         }
 
         private void CreateDefaultTemplates()
