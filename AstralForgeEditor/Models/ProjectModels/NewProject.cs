@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.AccessControl;
+using System.Text.Json;
 
 
 namespace AstralForgeEditor.Models.ProjectModels
@@ -139,7 +140,8 @@ namespace AstralForgeEditor.Models.ProjectModels
 
             return IsValid;
         }
-
+        private ObservableCollection<RecentProject> _recentProjects = new ObservableCollection<RecentProject>();
+        public ReadOnlyObservableCollection<RecentProject> RecentProjects { get; }
         public NewProject()
         {
             ProjectTemplates = new ReadOnlyObservableCollection<ProjectTemplate>(_projectTemplates);
@@ -158,11 +160,54 @@ namespace AstralForgeEditor.Models.ProjectModels
                     _projectTemplates.Add(template);
                 }
                 ValidateProjectPath();
+
+                RecentProjects = new ReadOnlyObservableCollection<RecentProject>(_recentProjects);
+                LoadRecentProjects();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 //TODO: Log errors 
+            }
+        }
+
+        public void AddRecentProject(string name, string path)
+        {
+            var existingProject = _recentProjects.FirstOrDefault(p => p.Path == path);
+            if (existingProject != null)
+            {
+                _recentProjects.Remove(existingProject);
+            }
+
+            _recentProjects.Insert(0, new RecentProject { Name = name, Path = path, LastOpened = DateTime.Now });
+
+            // Keep only the 10 most recent projects
+            while (_recentProjects.Count > 10)
+            {
+                _recentProjects.RemoveAt(_recentProjects.Count - 1);
+            }
+
+            SaveRecentProjects();
+        }
+        private void SaveRecentProjects()
+        {
+            string recentProjectsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AstralForge", "RecentProjects.json");
+            Directory.CreateDirectory(Path.GetDirectoryName(recentProjectsFile));
+            string json = JsonSerializer.Serialize(_recentProjects.ToList(), new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(recentProjectsFile, json);
+        }
+        private void LoadRecentProjects()
+        {
+            // Load recent projects from a file or database
+            // For this example, we'll use a JSON file
+            string recentProjectsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AstralForge", "RecentProjects.json");
+            if (File.Exists(recentProjectsFile))
+            {
+                var recentProjects = JsonSerializer.Deserialize<List<RecentProject>>(File.ReadAllText(recentProjectsFile));
+                foreach (var project in recentProjects)
+                {
+                    _recentProjects.Add(project);
+                }
             }
         }
 

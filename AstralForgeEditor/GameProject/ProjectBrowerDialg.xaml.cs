@@ -10,15 +10,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Microsoft.Win32; // Correct namespace for OpenFileDialog
-using MessageBox = System.Windows.MessageBox; // Disambiguate between Windows.Forms and WPF
+using Microsoft.Win32;
+using MessageBox = System.Windows.MessageBox;
 
 namespace AstralForgeEditor.GameProject
 {
-    /// <summary>
-    /// Interaction logic for ProjectBrowerDialg.xaml
-    /// </summary>
     public partial class ProjectBrowerDialg : Window
     {
         private NewProject _newProject;
@@ -40,32 +36,57 @@ namespace AstralForgeEditor.GameProject
             TemplateList.Visibility = Visibility.Visible;
             DetailsTitle.Text = "Template Details";
             DetailsContent.Text = "Select a template to see the details.";
-            NewProjectDetails.Visibility = Visibility.Visible; // Show the new project details section
+            NewProjectDetails.Visibility = Visibility.Visible;
+            OpenSelectedProjectButton.Visibility = Visibility.Collapsed;
         }
 
-        private void OpenProjectButton_Click(object sender, RoutedEventArgs e)
+        private void OpenExistingProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            ProjectList.Visibility = Visibility.Visible;
-            TemplateList.Visibility = Visibility.Collapsed;
-            DetailsTitle.Text = "Project Details";
-            DetailsContent.Text = "Select a project to see the details.";
-            NewProjectDetails.Visibility = Visibility.Collapsed; // Hide the new project details section
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "AstralForge Project Files (*.afproj)|*.afproj",
+                Title = "Open AstralForge Project"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string projectPath = openFileDialog.FileName;
+                // Implement logic to open the selected project file
+                _newProject.AddRecentProject(System.IO.Path.GetFileNameWithoutExtension(projectPath), projectPath);
+                MessageBox.Show($"Opening project: {projectPath}", "Open Project", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogResult = true;
+                Close();
+            }
+        }
+
+        private void OpenSelectedProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProjectList.SelectedItem is RecentProject selectedProject)
+            {
+                _newProject.AddRecentProject(selectedProject.Name, selectedProject.Path);
+                MessageBox.Show($"Opening project: {selectedProject.Name}", "Open Project", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogResult = true;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to open.", "No Project Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void ProjectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ProjectList.SelectedItem != null)
+            if (ProjectList.SelectedItem is RecentProject selectedProject)
             {
                 DetailsTitle.Text = "Project Details";
-                DetailsContent.Text = $"Details of {((ListBoxItem)ProjectList.SelectedItem).Content}";
+                DetailsContent.Text = $"Name: {selectedProject.Name}\nPath: {selectedProject.Path}\nLast Opened: {selectedProject.LastOpened:g}";
             }
         }
 
         private void TemplateList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TemplateList.SelectedItem != null)
+            if (TemplateList.SelectedItem is ProjectTemplate selectedTemplate)
             {
-                var selectedTemplate = (ProjectTemplate)TemplateList.SelectedItem;
                 _newProject.SelectedTemplate = selectedTemplate;
                 DetailsTitle.Text = "Template Details";
                 DetailsContent.Text = $"Details of {selectedTemplate.ProjectType}\nFolders: {string.Join(", ", selectedTemplate.Folders)}";
@@ -91,16 +112,17 @@ namespace AstralForgeEditor.GameProject
 
             try
             {
-                Directory.CreateDirectory(projectPath);
+                System.IO.Directory.CreateDirectory(projectPath);
 
                 foreach (var folder in _newProject.SelectedTemplate.Folders)
                 {
-                    Directory.CreateDirectory(System.IO.Path.Combine(projectPath, folder));
+                    System.IO.Directory.CreateDirectory(System.IO.Path.Combine(projectPath, folder));
                 }
 
                 _newProject.SaveProjectFile(projectPath);
-                this.DialogResult = true;
-                this.Close();
+                _newProject.AddRecentProject(projectName, projectPath);
+                DialogResult = true;
+                Close();
             }
             catch (Exception ex)
             {
@@ -118,10 +140,20 @@ namespace AstralForgeEditor.GameProject
             }
         }
 
+        private void BackToRecentProjectsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectList.Visibility = Visibility.Visible;
+            TemplateList.Visibility = Visibility.Collapsed;
+            DetailsTitle.Text = "Project Details";
+            DetailsContent.Text = "Select a project to see the details.";
+            NewProjectDetails.Visibility = Visibility.Collapsed;
+            OpenSelectedProjectButton.Visibility = Visibility.Visible;
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
     }
 }

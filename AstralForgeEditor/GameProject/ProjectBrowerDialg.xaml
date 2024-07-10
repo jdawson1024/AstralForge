@@ -76,10 +76,17 @@
                     <DockPanel>
                         <TextBlock Text="Projects" FontWeight="Bold" FontSize="18" Foreground="White" DockPanel.Dock="Top" Margin="0,0,0,15"/>
                         <ListBox Name="ProjectList" Style="{StaticResource ModernListBox}" SelectionMode="Single" 
-                                 Visibility="Visible" SelectionChanged="ProjectList_SelectionChanged" DockPanel.Dock="Top">
-                            <ListBoxItem Content="Project 1" />
-                            <ListBoxItem Content="Project 2" />
-                            <ListBoxItem Content="Project 3" />
+                                 Visibility="Visible" SelectionChanged="ProjectList_SelectionChanged" DockPanel.Dock="Top"
+                                 ItemsSource="{Binding RecentProjects}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Margin="0,5">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Path}" FontSize="10"/>
+                                        <TextBlock Text="{Binding LastOpened, StringFormat='Last opened: {0:g}'}" FontSize="10"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
                         <ListBox Name="TemplateList" Style="{StaticResource ModernListBox}" SelectionMode="Single" 
                                  Visibility="Collapsed" SelectionChanged="TemplateList_SelectionChanged"
@@ -99,12 +106,16 @@
                         <Button Name="CreateNewProjectButton" Style="{StaticResource ModernButton}" 
                                 Content="Create New Project" Margin="0,0,0,10"
                                 Click="CreateNewProjectButton_Click" />
-                        <Button Name="OpenProjectButton" Style="{StaticResource ModernButton}" 
-                                Content="Open Selected Project" Margin="0,0,0,20"
-                                Click="OpenProjectButton_Click" />
+                        <Button Name="OpenExistingProjectButton" Style="{StaticResource ModernButton}" 
+                                Content="Open Existing Project" Margin="0,0,0,20"
+                                Click="OpenExistingProjectButton_Click" />
                         <TextBlock Name="DetailsTitle" Text="Details" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,10,0,10" />
                         <TextBlock Name="DetailsContent" Text="Select a project or template to see the details." 
                                    TextWrapping="Wrap" Margin="0,0,0,20" Foreground="#B2B2B2"/>
+                        <Button Name="OpenSelectedProjectButton" Style="{StaticResource ModernButton}" 
+                                Content="Open Selected Project" Margin="0,0,0,20"
+                                Click="OpenSelectedProjectButton_Click" 
+                                Visibility="{Binding ElementName=ProjectList, Path=Visibility}" />
                         <StackPanel Name="NewProjectDetails" Visibility="Collapsed" Margin="0,20,0,0">
                             <TextBlock Text="New Project Name" FontWeight="Bold" Margin="0,0,0,5" Foreground="White"/>
                             <TextBox Name="ProjectNameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,15" 
@@ -120,6 +131,9 @@
                                 <Button Grid.Column="1" Content="Browse" Style="{StaticResource ModernButton}" Click="BrowseButton_Click" Width="100" />
                             </Grid>
                             <TextBlock Text="{Binding ErrorMsg}" Foreground="#FF4545" Margin="0,10,0,10" />
+                            <Button Name="BackToRecentProjectsButton" Style="{StaticResource ModernButton}" 
+                                    Content="Back to Recent Projects" Margin="0,0,0,10"
+                                    Click="BackToRecentProjectsButton_Click" />
                             <Button Name="CreateProjectButton" Style="{StaticResource ModernButton}" 
                                     Content="Create Project" Margin="0,10,0,0"
                                     Click="CreateProjectButton_Click" IsEnabled="{Binding IsValid}" />
