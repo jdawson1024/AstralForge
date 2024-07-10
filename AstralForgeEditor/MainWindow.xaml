@@ -5,8 +5,100 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AstralForgeEditor"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="AstralForge Editor" Height="450" Width="800">
+        Title="AstralForge Editor" Height="900" Width="1600"
+        Background="#1E1E1E" WindowState="Maximized">
+    <Window.Resources>
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3E3E42"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <!-- Top Menu -->
+        <Menu Grid.Row="0" Background="#2D2D30">
+            <MenuItem Header="File" Foreground="#CCCCCC">
+                <MenuItem Header="New Project" Click="NewProject_Click"/>
+                <MenuItem Header="Open Project" Click="OpenProject_Click"/>
+                <MenuItem Header="Save" Click="Save_Click"/>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Edit" Foreground="#CCCCCC"/>
+            <MenuItem Header="View" Foreground="#CCCCCC"/>
+            <MenuItem Header="Build" Foreground="#CCCCCC"/>
+            <MenuItem Header="Help" Foreground="#CCCCCC"/>
+        </Menu>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="1" Background="#333337">
+            <Button Content="Play" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="Pause" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="Stop" Style="{StaticResource MenuButtonStyle}"/>
+            <Separator/>
+            <Button Content="Translate" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="Rotate" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="Scale" Style="{StaticResource MenuButtonStyle}"/>
+        </ToolBar>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Project Hierarchy -->
+            <Border Grid.Column="0" Background="#252526" BorderBrush="#3F3F46" BorderThickness="0,0,1,0">
+                <TreeView Background="Transparent" Foreground="#CCCCCC">
+                    <TreeViewItem Header="Project" IsExpanded="True">
+                        <TreeViewItem Header="Scenes"/>
+                        <TreeViewItem Header="Assets"/>
+                        <TreeViewItem Header="Scripts"/>
+                    </TreeViewItem>
+                </TreeView>
+            </Border>
+
+            <!-- 3D Viewport -->
+            <Border Grid.Column="1" Background="#1E1E1E" BorderBrush="#3F3F46" BorderThickness="1">
+                <TextBlock Text="3D Viewport" Foreground="#CCCCCC" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+
+            <!-- Properties Panel -->
+            <Border Grid.Column="2" Background="#252526" BorderBrush="#3F3F46" BorderThickness="1,0,0,0">
+                <TextBlock Text="Properties" Foreground="#CCCCCC" Margin="10"/>
+            </Border>
+        </Grid>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="3" Background="#007ACC" Foreground="White">
+            <StatusBarItem Content="Ready"/>
+            <Separator/>
+            <StatusBarItem Content="FPS: 60"/>
+            <Separator/>
+            <StatusBarItem Content="Objects: 100"/>
+        </StatusBar>
     </Grid>
 </Window>
