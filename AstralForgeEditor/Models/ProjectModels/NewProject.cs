@@ -142,6 +142,7 @@ namespace AstralForgeEditor.Models.ProjectModels
         }
         private ObservableCollection<RecentProject> _recentProjects = new ObservableCollection<RecentProject>();
         public ReadOnlyObservableCollection<RecentProject> RecentProjects { get; }
+        public bool HasProjects => RecentProjects.Any();
         public NewProject()
         {
             ProjectTemplates = new ReadOnlyObservableCollection<ProjectTemplate>(_projectTemplates);

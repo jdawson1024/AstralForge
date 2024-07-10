@@ -31,7 +31,7 @@ namespace AstralForgeEditor
 
         private void OpenProjectBrowserDialog()
         {
-            var projectBrowser = new ProjectBrowerDialg();
+            var projectBrowser = new ProjectBrowserDialog();
             projectBrowser.Owner = this;
             projectBrowser.ShowDialog();
         }
@@ -39,7 +39,7 @@ namespace AstralForgeEditor
         private void NewProject_Click(object sender, RoutedEventArgs e)
         {
             // Open the ProjectBrowerDialg for creating a new project
-            var projectBrowser = new GameProject.ProjectBrowerDialg();
+            var projectBrowser = new GameProject.ProjectBrowserDialog();
             projectBrowser.Owner = this;
             var result = projectBrowser.ShowDialog();
 
@@ -53,7 +53,7 @@ namespace AstralForgeEditor
         private void OpenProject_Click(object sender, RoutedEventArgs e)
         {
             // Open the ProjectBrowerDialg for opening an existing project
-            var projectBrowser = new GameProject.ProjectBrowerDialg();
+            var projectBrowser = new GameProject.ProjectBrowserDialog();
             projectBrowser.Owner = this;
             var result = projectBrowser.ShowDialog();
 
