@@ -13,21 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{10e4d310-50c4-4ffa-b095-294e0d7ff6c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{c4609c1a-3a46-4cc2-af7d-f44394dd5ac3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{44009d06-68aa-4af7-9419-d49899bd4444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{c62a6e10-faf0-457d-8c00-4f144f6ab1cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{80cc92a8-ebcc-48b6-9392-ca5d9411b514}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -36,33 +21,18 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Engine.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Window.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\Renderer.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
+    <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Engine.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Exports.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Window.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\Renderer.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="..\Engine\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
