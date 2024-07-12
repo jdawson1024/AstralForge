@@ -11,4 +11,8 @@
     <BaseOutputPath>..\x64\</BaseOutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EngineWrapperDLL\EngineWrapperDLL.vcxproj" />
+  </ItemGroup>
+
 </Project>

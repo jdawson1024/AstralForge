@@ -5,27 +5,53 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstralForgeEditor", "AstralForgeEditor\AstralForgeEditor.csproj", "{4AF45B11-A213-4A16-B4E0-BCF81A927444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstralForgeEditor", "AstralForgeEditor\AstralForgeEditor.csproj", "{4AF45B11-A213-4A16-B4E0-BCF81A927444}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineWrapper", "EngineWrapper\EngineWrapper.vcxitems", "{C883C798-5350-42C8-97D2-8B829611B1D2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineWrapperDLL", "EngineWrapperDLL\EngineWrapperDLL.vcxproj", "{E7048B2E-58C4-4FBE-925A-5C14224FACE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Debug|x64.ActiveCfg = Debug|x64
 		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Debug|x64.Build.0 = Debug|x64
+		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Debug|x86.ActiveCfg = Debug|Win32
+		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Debug|x86.Build.0 = Debug|Win32
 		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Release|x64.ActiveCfg = Release|x64
 		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Release|x64.Build.0 = Release|x64
+		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Release|x86.ActiveCfg = Release|Win32
+		{D9B6935E-30D7-4077-BC0C-FC91EBB072CF}.Release|x86.Build.0 = Release|Win32
 		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Debug|x64.Build.0 = Debug|Any CPU
+		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Debug|x86.Build.0 = Debug|Any CPU
 		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Release|x64.ActiveCfg = Release|Any CPU
 		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Release|x64.Build.0 = Release|Any CPU
+		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Release|x86.ActiveCfg = Release|Any CPU
+		{4AF45B11-A213-4A16-B4E0-BCF81A927444}.Release|x86.Build.0 = Release|Any CPU
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Debug|x64.ActiveCfg = Debug|x64
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Debug|x64.Build.0 = Debug|x64
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Debug|x86.ActiveCfg = Debug|Win32
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Debug|x86.Build.0 = Debug|Win32
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Release|x64.ActiveCfg = Release|x64
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Release|x64.Build.0 = Release|x64
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Release|x86.ActiveCfg = Release|Win32
+		{E7048B2E-58C4-4FBE-925A-5C14224FACE8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ACE6617D-CA96-4E51-A936-C68C3C874565}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		EngineWrapper\EngineWrapper.vcxitems*{c883c798-5350-42c8-97d2-8b829611b1d2}*SharedItemsImports = 9
+		EngineWrapper\EngineWrapper.vcxitems*{e7048b2e-58c4-4fbe-925a-5c14224face8}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AstralForgeEditor"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="AstralForge Editor" Height="900" Width="1600"
-        Background="#1E1E1E" WindowState="Maximized">
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="AstralForge Editor"
+        Height="900"
+        Width="1600"
+        Background="#1E1E1E"
+        WindowState="Maximized">
     <Window.Resources>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -82,9 +88,9 @@
             </Border>
 
             <!-- 3D Viewport -->
-            <Border Grid.Column="1" Background="#1E1E1E" BorderBrush="#3F3F46" BorderThickness="1">
-                <TextBlock Text="3D Viewport" Foreground="#CCCCCC" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
+            <wfi:WindowsFormsHost Name="GLHost" Grid.Column="1">
+                <wf:Panel x:Name="GLPanel" />
+            </wfi:WindowsFormsHost>
 
             <!-- Properties Panel -->
             <Border Grid.Column="2" Background="#252526" BorderBrush="#3F3F46" BorderThickness="1,0,0,0">

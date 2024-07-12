@@ -9,6 +9,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Integration;
+using System.Windows.Forms;
 
 namespace AstralForgeEditor
 {
@@ -17,16 +21,61 @@ namespace AstralForgeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        [DllImport("EngineWrapperDLL.dll")]
+        private static extern IntPtr CreateEngine();
+
+        [DllImport("EngineWrapperDLL.dll")]
+        private static extern void DestroyEngine(IntPtr engine);
+
+        [DllImport("EngineWrapperDLL.dll")]
+        private static extern bool InitializeEngine(IntPtr engine, IntPtr windowHandle, int width, int height);
+
+        [DllImport("EngineWrapperDLL.dll")]
+        private static extern void RenderEngine(IntPtr engine);
+
+        private IntPtr enginePtr;
+        private System.Windows.Forms.Timer renderTimer;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            enginePtr = CreateEngine();
+
             Loaded += OnMainWindowLoaded; 
+            Closing += OnMainWindowClosing;
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
         {
             Loaded -= OnMainWindowLoaded;
             OpenProjectBrowserDialog();
+            
+            var handle = GLPanel.Handle;
+            if(!InitializeEngine(enginePtr, handle, (int)GLHost.ActualWidth, (int)GLHost.ActualHeight))
+            {
+                System.Windows.MessageBox.Show("Failed to initialize engine.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            renderTimer = new System.Windows.Forms.Timer();
+            renderTimer.Interval = 16; // 60 FPS
+            renderTimer.Tick += (s, a) => RenderEngine(enginePtr);
+            renderTimer.Start();
+        }
+
+        private void OnMainWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (renderTimer != null)
+            {
+                renderTimer.Stop();
+                renderTimer.Dispose();
+            }
+
+            if(enginePtr != IntPtr.Zero)
+            {
+                DestroyEngine(enginePtr);
+            }
         }
 
         private void OpenProjectBrowserDialog()
