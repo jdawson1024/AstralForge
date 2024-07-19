@@ -14,6 +14,7 @@ namespace AstralForgeEditor.GameProject
         public string AstralForgeEngineVersion { get; set; }
         public string TemplateName { get; set; }
         public List<string> TemplateFolders { get; set; }
+        public int number { get; set; }
 
         public static Project Load(string path)
         {
